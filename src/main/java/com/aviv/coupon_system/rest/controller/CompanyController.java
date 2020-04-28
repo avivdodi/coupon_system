@@ -20,6 +20,7 @@ import java.util.Map;
 
 /*This controllers handle the client type company requests and return responses to the client.*/
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/companies")
 public class CompanyController {
@@ -32,7 +33,7 @@ public class CompanyController {
     }
 
     /***
-     *
+     * Add a coupon to DB.
      * @param coupon
      * @param token
      * @return

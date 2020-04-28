@@ -45,6 +45,10 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
     @Query("select c from Coupon c where c.amount <1 and c.company.id =:companyId")
     List<Coupon> findZeroAmountCoupons(long companyId);
 
+    @Query("select c from Coupon c where c.amount > 0")
+    List<Coupon> findAllAvailableCoupons();
+
+
     /*Admin functions:*/
     @Query("select c from Coupon c where c.endDate <=:date")
     List<Coupon> findCouponsBeforeEndDate(LocalDate date);

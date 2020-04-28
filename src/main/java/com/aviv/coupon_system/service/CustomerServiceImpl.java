@@ -101,15 +101,23 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer update(Customer customer) throws UpdateNotAllowedException {
         customer.setId(customerId);
         if (customerCheck(customer)) {
-            throw new UpdateNotAllowedException("The given company cannot be updated. One field or more is missing.");
+            throw new UpdateNotAllowedException("The given customer cannot be updated. One field or more is missing.");
         }
         Customer dbCustomer = customerRepository.findById(customerId).get();
+        if (dbCustomer.getUser().getEmail()!=customer.getUser().getEmail()){
+            throw new UpdateNotAllowedException("You can't change your email.");
+        }
         User user = customer.getUser();
         user.setClient(customer);
         user.setId(dbCustomer.getUser().getId());
         customer.setUser(user);
         customer.setCoupons(findAllByCustomerId());
         return customerRepository.save(customer);
+    }
+
+    @Override
+    public List<Coupon> findAllAvailableCoupons() {
+        return couponRepository.findAllAvailableCoupons();
     }
 
     @Override

@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /*This Rest controller handles login requests and responses.*/
-
+@CrossOrigin
 @RestController
 @RequestMapping("/api")
 public class LoginController {
@@ -28,11 +28,12 @@ public class LoginController {
     }
 
     /**
+     * Login into the DB.
      * Although the login function is not includes Json in the body, and there is no change in the DB,
      * I want to use Post mapping to create new ClientSession, and to improve the authentication in the server in future.
      * @param email
      * @param password
-     * @return
+     * @return Returns the role number + token. The role number is for the Angular using.
      * @throws InvalidLoginException
      */
     @PostMapping("/users/login")
@@ -46,7 +47,8 @@ public class LoginController {
                 return tokenFromChecker;
             }
         }
-        String token = generateToken();
+        int role = session.getAbsService().getRole();
+        String token = role+generateToken();
         tokensMap.put(token, session);
         return ResponseEntity.ok(token);
     }

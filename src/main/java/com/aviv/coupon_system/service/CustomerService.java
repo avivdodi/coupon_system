@@ -44,7 +44,7 @@ public interface CustomerService extends AbsService {
     List<Coupon> findCouponsBeforeEndDate(LocalDate date) throws ConversionFailedException;
 
     /**
-     * Function that allowe to a customer to buy a coupon.
+     * Function that allow to customer to buy a coupon.
      *
      * @param couponId to purchase.
      * @return
@@ -64,5 +64,10 @@ public interface CustomerService extends AbsService {
      */
     Customer update(Customer customer) throws UpdateNotAllowedException;
 
-
+    /**
+     * This function allowa the customer to watch all the available coupons.
+     *
+     * @return Coupons list.
+     */
+    List<Coupon> findAllAvailableCoupons();
 }

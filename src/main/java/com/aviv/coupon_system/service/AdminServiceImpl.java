@@ -165,6 +165,16 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public List<Company> findAllCompanies() {
+        return companyRepository.findAll();
+    }
+
+    @Override
+    public List<Customer> findAllCustomers() {
+        return customerRepository.findAll();
+    }
+
+    @Override
     public void setId(long adminId) {
         this.adminId = adminId;
     }

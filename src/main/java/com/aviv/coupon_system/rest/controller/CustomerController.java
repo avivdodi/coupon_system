@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ import java.util.Map;
 /*This controllers handle the client type customer requests and return responses to the client.*/
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/customers")
 public class CustomerController {
 
@@ -62,6 +64,13 @@ public class CustomerController {
             throws InvalidLoginException, ConversionFailedException {
         CustomerService customerService = getService(token);
         List<Coupon> coupons = customerService.findCouponsBeforeEndDate(date);
+        return coupons.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(coupons);
+    }
+
+    @GetMapping("/{token}/allAvailableCoupons")
+    public ResponseEntity<List<Coupon>> getAllAvailableCoupons(@PathVariable String token) throws InvalidLoginException {
+        CustomerService customerService = getService(token);
+        List<Coupon> coupons = customerService.findAllAvailableCoupons();
         return coupons.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(coupons);
     }
 
@@ -108,7 +117,7 @@ public class CustomerController {
      * @throws InvalidLoginException
      * @throws ClassCastException
      */
-    @DeleteMapping("/logOff/{token}")
+    @DeleteMapping(value = "/logOff/{token}")
     public ResponseEntity<HttpStatus> logOff(@PathVariable String token) throws InvalidLoginException,
             ClassCastException {
         getService(token);

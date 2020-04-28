@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /*The following controller get all the requests from client admin and send the responses to the client type admin.*/
+@CrossOrigin
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
@@ -114,6 +115,20 @@ public class AdminController {
         return emptyCoupons.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(emptyCoupons);
     }
 
+    @GetMapping("/{token}/getAllCompanies")
+    public ResponseEntity<List<Company>> getAllCompanies(@PathVariable String token) throws InvalidLoginException {
+        AdminService adminService = getService(token);
+        List<Company> companies = adminService.findAllCompanies();
+        return companies.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(companies);
+    }
+
+    @GetMapping("/{token}/getAllCustomers")
+    public ResponseEntity<List<Customer>> getAllCustomers(@PathVariable String token) throws InvalidLoginException {
+        AdminService adminService = getService(token);
+        List<Customer> customers = adminService.findAllCustomers();
+        return customers.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(customers);
+    }
+
     /**
      * This function disconnecting a user. There is a check if the user has the right token of the specific type of user,
      * Then the token and the clientSession removed from the Tokens map.
@@ -126,12 +141,12 @@ public class AdminController {
      * @throws ClassCastException
      */
     @DeleteMapping("/logOff/{token}")
-    public ResponseEntity<HttpStatus> logOff(@PathVariable String token) throws InvalidLoginException,
+    public ResponseEntity<String> logOff(@PathVariable String token) throws InvalidLoginException,
             ClassCastException {
         getService(token);
         ClientSession clientSession = tokensMap.get(token);
         tokensMap.remove(token, clientSession);
-        return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.ok(HttpStatus.OK.toString());
     }
 
     /**

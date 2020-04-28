@@ -35,7 +35,7 @@ public class LoginSystem {
      *
      * @param email
      * @param password
-     * @return
+     * @return ClientSession
      * @throws InvalidLoginException
      */
     public ClientSession login(String email, String password) throws InvalidLoginException {
@@ -53,6 +53,14 @@ public class LoginSystem {
         return getSessionWith(serviceType, client.getId());
     }
 
+    /**
+     * Request the repository to search for matching between email and password.
+     *
+     * @param email
+     * @param password
+     * @return User
+     * @throws InvalidLoginException
+     */
     public User getUserByEmailAndPassword(String email, String password) throws InvalidLoginException {
         Optional<User> user = userRepository.findByEmailAndPassword(email, password);
         if (!user.isPresent()) {
